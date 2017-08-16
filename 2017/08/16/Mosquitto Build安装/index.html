@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="[TOC]  1.安装编译工具12yum install gcc-c++yum install cmake 2.安装依赖库 openssl-devel： TLS安全链接支持所需库 c-areas-devel： 一个支持异步DNS查找的库 libuuid-devel： 为每个连接的客户端生成唯一的uuid libwebsockets： 对websocket进行支持 需增加扩展的yum库,系统默认不支">
+<meta name="keywords" content="mqtt,mosquitto,iot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MQTT Build安装">
+<meta property="og:url" content="http://yoursite.com/2017/08/16/Mosquitto Build安装/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="[TOC]  1.安装编译工具12yum install gcc-c++yum install cmake 2.安装依赖库 openssl-devel： TLS安全链接支持所需库 c-areas-devel： 一个支持异步DNS查找的库 libuuid-devel： 为每个连接的客户端生成唯一的uuid libwebsockets： 对websocket进行支持 需增加扩展的yum库,系统默认不支">
+<meta property="og:updated_time" content="2017-08-16T06:34:10.612Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MQTT Build安装">
+<meta name="twitter:description" content="[TOC]  1.安装编译工具12yum install gcc-c++yum install cmake 2.安装依赖库 openssl-devel： TLS安全链接支持所需库 c-areas-devel： 一个支持异步DNS查找的库 libuuid-devel： 为每个连接的客户端生成唯一的uuid libwebsockets： 对websocket进行支持 需增加扩展的yum库,系统默认不支">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>MQTT Build安装</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- rss -->
+    
+    
+</head>
+
+<body>
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="http://github.com/probberechts">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2017/08/13/hello-world/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2017/08/16/Mosquitto Build安装/"><i class="fa fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2017/08/16/Mosquitto Build安装/&text=MQTT Build安装"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2017/08/16/Mosquitto Build安装/&title=MQTT Build安装"><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2017/08/16/Mosquitto Build安装/&is_video=false&description=MQTT Build安装"><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=MQTT Build安装&body=Check out this article: http://yoursite.com/2017/08/16/Mosquitto Build安装/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2017/08/16/Mosquitto Build安装/&title=MQTT Build安装"><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2017/08/16/Mosquitto Build安装/&title=MQTT Build安装"><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2017/08/16/Mosquitto Build安装/&title=MQTT Build安装"><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2017/08/16/Mosquitto Build安装/&title=MQTT Build安装"><i class="fa fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2017/08/16/Mosquitto Build安装/&name=MQTT Build安装&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-安装编译工具"><span class="toc-number">1.</span> <span class="toc-text">1.安装编译工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-安装依赖库"><span class="toc-number">2.</span> <span class="toc-text">2.安装依赖库</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-安装aliyun的yum扩展库"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 安装aliyun的yum扩展库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-依赖库安装"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 依赖库安装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-编译安装Mosquitto"><span class="toc-number">3.</span> <span class="toc-text">3. 编译安装Mosquitto</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-下载并解压"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 下载并解压</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-修改编译配置文件config-mk"><span class="toc-number">4.</span> <span class="toc-text">3.2 修改编译配置文件config.mk</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-执行安装"><span class="toc-number">5.</span> <span class="toc-text">3.3 执行安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-配置环境变量"><span class="toc-number">6.</span> <span class="toc-text">3.4 配置环境变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-配置服务及防火墙"><span class="toc-number">7.</span> <span class="toc-text">4. 配置服务及防火墙</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-配置Mosquitto"><span class="toc-number">7.1.</span> <span class="toc-text">4.1 配置Mosquitto</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-配置防火墙"><span class="toc-number">7.2.</span> <span class="toc-text">4.2 配置防火墙</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-测试运行"><span class="toc-number">8.</span> <span class="toc-text">5. 测试运行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-异常处理"><span class="toc-number">9.</span> <span class="toc-text">6. 异常处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-参考文档"><span class="toc-number">10.</span> <span class="toc-text">7.参考文档</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index width mx-auto px2 my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        MQTT Build安装
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Hexo</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2017-08-16T06:34:10.575Z" itemprop="datePublished">2017-08-16</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/iot/">iot</a>, <a class="tag-link" href="/tags/mosquitto/">mosquitto</a>, <a class="tag-link" href="/tags/mqtt/">mqtt</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>[TOC]</p>
+<hr>
+<h2 id="1-安装编译工具"><a href="#1-安装编译工具" class="headerlink" title="1.安装编译工具"></a>1.安装编译工具</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">yum install gcc-c++</div><div class="line">yum install cmake</div></pre></td></tr></table></figure>
+<h2 id="2-安装依赖库"><a href="#2-安装依赖库" class="headerlink" title="2.安装依赖库"></a>2.安装依赖库</h2><ul>
+<li>openssl-devel： TLS安全链接支持所需库</li>
+<li>c-areas-devel： 一个支持异步DNS查找的库</li>
+<li>libuuid-devel： 为每个连接的客户端生成唯一的uuid</li>
+<li>libwebsockets： 对websocket进行支持<blockquote>
+<p>需增加扩展的yum库,系统默认不支持此工具yum安装</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="2-1-安装aliyun的yum扩展库"><a href="#2-1-安装aliyun的yum扩展库" class="headerlink" title="2.1 安装aliyun的yum扩展库"></a>2.1 安装aliyun的yum<a href="http://mirrors.aliyun.com/repo/" target="_blank" rel="external">扩展库</a></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#将扩展库下载到/etc/yum.repos.d目录</div><div class="line">wget -P /etc/yum.repos.d/ http://mirrors.aliyun.com/repo/epel-7.repo</div><div class="line">#重建yumdb缓存</div><div class="line">yum clean dbcache</div><div class="line">yum makecache</div></pre></td></tr></table></figure>
+<h3 id="2-2-依赖库安装"><a href="#2-2-依赖库安装" class="headerlink" title="2.2 依赖库安装"></a>2.2 依赖库安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install openssl-devel c-ares-devel libuuid-devel libwebsockets-devel</div></pre></td></tr></table></figure>
+<h2 id="3-编译安装Mosquitto"><a href="#3-编译安装Mosquitto" class="headerlink" title="3. 编译安装Mosquitto"></a>3. 编译安装Mosquitto</h2><h3 id="3-1-下载并解压"><a href="#3-1-下载并解压" class="headerlink" title="3.1 下载并解压"></a>3.1 下载并解压</h3><ul>
+<li>到<a href="https://mosquitto.org/download/" target="_blank" rel="external">官网</a>下载最新版本<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">#package-size only 319kB</div><div class="line">wget http://mosquitto.org/files/source/mosquitto-1.4.14.tar.gz</div><div class="line">tar -zxvf mosquitto-1.4.14.tar.gz #解压</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="3-2-修改编译配置文件config-mk"><a href="#3-2-修改编译配置文件config-mk" class="headerlink" title="3.2 修改编译配置文件config.mk"></a>3.2 修改编译配置文件config.mk</h2><ul>
+<li>将<code>WITH_WEBSOCKETS</code>配置修改为yes。以支持websocket</li>
+<li>将<code>prefix=/usr/local</code>安装路径修改为<code>/etc/mosquitto</code><blockquote>
+<p>修改前默认安装路径如下</p>
+<ul>
+<li>/usr/local/sbin： mosuqitto指令安装</li>
+<li>/etc/mosquitto： 配置文件</li>
+<li>/usr/local/bin:  moquitto_pub,mosquitto_sub等工具</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h2 id="3-3-执行安装"><a href="#3-3-执行安装" class="headerlink" title="3.3 执行安装"></a>3.3 执行安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure>
+<h2 id="3-4-配置环境变量"><a href="#3-4-配置环境变量" class="headerlink" title="3.4 配置环境变量"></a>3.4 配置环境变量</h2><ul>
+<li><p>将如下配置加入/etc/profile。以支持在任意目录执行mosquitto命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">MQTT_HOME=/etc/mosquitto</div><div class="line">PATH=.:$MQTT_HOME/bin:$MQTT_HOME/sbin:$PATH</div><div class="line">export MQTT_HOME PATH</div></pre></td></tr></table></figure>
+</li>
+<li><p>执行<code>source /etc/profile</code>以生效配置</p>
+</li>
+</ul>
+<h2 id="4-配置服务及防火墙"><a href="#4-配置服务及防火墙" class="headerlink" title="4. 配置服务及防火墙"></a>4. 配置服务及防火墙</h2><h3 id="4-1-配置Mosquitto"><a href="#4-1-配置Mosquitto" class="headerlink" title="4.1 配置Mosquitto"></a>4.1 配置Mosquitto</h3><ul>
+<li>创建/etc/mosquitto/mosquitto.conf, 可参考/etc/mosquitto/mosquitto.conf.example中的说明</li>
+<li>创建日志文件目录 <code>mkdir -p /var/logs/mosquitto/</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">#MQTT配置文件</div><div class="line">pid_file /var/run/mosquitto.pid</div><div class="line"></div><div class="line">user root</div><div class="line"></div><div class="line">log_dest file /var/logs/mosquitto/mosquitto.log #需创建日志目录</div><div class="line">log_type all</div><div class="line">log_timestamp true</div><div class="line">connection_messages true</div><div class="line"></div><div class="line">#mqtt监听端口</div><div class="line">listener 1883</div><div class="line">protocol mqtt</div><div class="line"></div><div class="line">#websocket端口</div><div class="line">listener 9001</div><div class="line">protocol websockets</div></pre></td></tr></table></figure>
+<h3 id="4-2-配置防火墙"><a href="#4-2-配置防火墙" class="headerlink" title="4.2 配置防火墙"></a>4.2 配置防火墙</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">firewall-cmd --add-port=1883/tcp --permanent</div><div class="line">firewall-cmd --add-port=9001/tcp --permanent</div><div class="line">firewall-cmd --reload</div></pre></td></tr></table></figure>
+<h2 id="5-测试运行"><a href="#5-测试运行" class="headerlink" title="5. 测试运行"></a>5. 测试运行</h2><ul>
+<li><p>server端</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"># 启动MQTT Server</div><div class="line">mosquitto -c /etc/mosquitto/mosquitto.conf -d</div><div class="line"># 检查启动情况，-d表示后台运行，有时候出错了服务并没有起来，但不会有异常提示</div><div class="line">ps -ef | grep mosquitto</div><div class="line"># 监听msg topic</div><div class="line">mosquitto_sub -t msg</div></pre></td></tr></table></figure>
+</li>
+<li><p>client端</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mosquitto_pub -t msg -m &quot;Hello World&quot; -h 192.168.1.211</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="6-异常处理"><a href="#6-异常处理" class="headerlink" title="6. 异常处理"></a>6. 异常处理</h2><blockquote>
+<p>mosquitto_pub: error while loading shared libraries: libmosquitto.so.1: cannot open shared object file: No such file or directory<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">#mosquitto依赖库lib文件夹下的两个文件需要链接到/usr/lib64中</div><div class="line">#如果不是64位系统连接到/usr/lib</div><div class="line">ln -s /etc/mosquitto/lib/libmosquitto.so.1 /usr/lib64/libmosquitto.so.1</div><div class="line">ln -s /etc/mosquitto/lib/libmosquittopp.so.1 /usr/lib64/libmosquittopp.so.1</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="7-参考文档"><a href="#7-参考文档" class="headerlink" title="7.参考文档"></a>7.参考文档</h2><ul>
+<li><a href="https://goochgooch.wordpress.com/2014/08/01/building-mosquitto-1-4/" target="_blank" rel="external">https://goochgooch.wordpress.com/2014/08/01/building-mosquitto-1-4/</a></li>
+<li><a href="https://tech.scargill.net/mosquitto-and-web-sockets/" target="_blank" rel="external">Mosquitto and Web Sockets</a></li>
+<li><a href="https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-the-mosquitto-mqtt-messaging-broker-on-centos-7" target="_blank" rel="external">How To Install and Secure the Mosquitto MQTT Messaging Broker on CentOS 7</a></li>
+<li><a href="https://dangphongvanthanh.wordpress.com/2016/02/06/build-mosquitto-on-centos/" target="_blank" rel="external">Build Mosquitto on CentOS</a></li>
+<li><a href="http://www.cnblogs.com/littleatp/p/4835879.html" target="_blank" rel="external">MQTT服务器搭建-mosquitto1.4.4安装指南</a></li>
+<li><a href="http://jpmens.net/2014/07/03/the-mosquitto-mqtt-broker-gets-websockets-support/" target="_blank" rel="external">The Mosquitto MQTT broker gets Websockets support含JS库使用</a></li>
+</ul>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="http://github.com/probberechts">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-安装编译工具"><span class="toc-number">1.</span> <span class="toc-text">1.安装编译工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-安装依赖库"><span class="toc-number">2.</span> <span class="toc-text">2.安装依赖库</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-安装aliyun的yum扩展库"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 安装aliyun的yum扩展库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-依赖库安装"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 依赖库安装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-编译安装Mosquitto"><span class="toc-number">3.</span> <span class="toc-text">3. 编译安装Mosquitto</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-下载并解压"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 下载并解压</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-修改编译配置文件config-mk"><span class="toc-number">4.</span> <span class="toc-text">3.2 修改编译配置文件config.mk</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-执行安装"><span class="toc-number">5.</span> <span class="toc-text">3.3 执行安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-配置环境变量"><span class="toc-number">6.</span> <span class="toc-text">3.4 配置环境变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-配置服务及防火墙"><span class="toc-number">7.</span> <span class="toc-text">4. 配置服务及防火墙</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-配置Mosquitto"><span class="toc-number">7.1.</span> <span class="toc-text">4.1 配置Mosquitto</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-配置防火墙"><span class="toc-number">7.2.</span> <span class="toc-text">4.2 配置防火墙</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-测试运行"><span class="toc-number">8.</span> <span class="toc-text">5. 测试运行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-异常处理"><span class="toc-number">9.</span> <span class="toc-text">6. 异常处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-参考文档"><span class="toc-number">10.</span> <span class="toc-text">7.参考文档</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2017/08/16/Mosquitto Build安装/"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2017/08/16/Mosquitto Build安装/&text=MQTT Build安装"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2017/08/16/Mosquitto Build安装/&title=MQTT Build安装"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2017/08/16/Mosquitto Build安装/&is_video=false&description=MQTT Build安装"><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=MQTT Build安装&body=Check out this article: http://yoursite.com/2017/08/16/Mosquitto Build安装/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2017/08/16/Mosquitto Build安装/&title=MQTT Build安装"><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2017/08/16/Mosquitto Build安装/&title=MQTT Build安装"><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2017/08/16/Mosquitto Build安装/&title=MQTT Build安装"><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2017/08/16/Mosquitto Build安装/&title=MQTT Build安装"><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2017/08/16/Mosquitto Build安装/&name=MQTT Build安装&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      <ul>
+        <li id="toc"><a class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa fa-list fa-lg" aria-hidden="true"></i> TOC</a></li>
+        <li id="share"><a class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa fa-share-alt fa-lg" aria-hidden="true"></i> Share</a></li>
+        <li id="top" style="display:none"><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a></li>
+        <li id="menu"><a class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Menu</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2017 John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="http://github.com/probberechts">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="/lib/meslo-LG/styles.css">
+<link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-86660611-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Disqus Comments -->
+
+
